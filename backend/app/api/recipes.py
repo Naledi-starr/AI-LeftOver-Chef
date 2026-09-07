@@ -16,7 +16,9 @@ router = APIRouter(
 
 
 @router.post("/generate", response_model=RecipeResponse)
-def create_recipe(request: RecipeRequest) -> RecipeResponse:
+async def create_recipe(
+    request: RecipeRequest,
+) -> RecipeResponse:
     """Generate a recipe using the ingredients provided by the user.
 
     Args:
@@ -26,4 +28,4 @@ def create_recipe(request: RecipeRequest) -> RecipeResponse:
         A generated recipe.
     """
 
-    return generate_recipe(request)
+    return await generate_recipe(request)

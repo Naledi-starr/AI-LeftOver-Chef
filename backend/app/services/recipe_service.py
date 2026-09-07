@@ -1,18 +1,23 @@
 """Recipe generation service.
 
 This module contains the business logic responsible for generating
-recipes from the ingredients supplied by the user.
-
-The AI integration will be added in a later step. Keeping the logic
-inside a service makes it easier to replace the mock implementation
-with a real AI model without changing the API layer.
+recipes using the AI provider.
 """
 
+import json
+
+from app.prompts.recipe_prompt import (
+    RECIPE_SYSTEM_PROMPT,
+    build_recipe_prompt,
+)
 from app.schemas.recipe import RecipeRequest, RecipeResponse
+from app.services.ai_client import chat_completion
 
 
-def generate_recipe(request: RecipeRequest) -> RecipeResponse:
-    """Generate a recipe from the user's available ingredients.
+async def generate_recipe(
+    request: RecipeRequest,
+) -> RecipeResponse:
+    """Generate an AI-powered recipe.
 
     Args:
         request: Recipe generation request containing ingredients,
@@ -20,25 +25,28 @@ def generate_recipe(request: RecipeRequest) -> RecipeResponse:
 
     Returns:
         A generated recipe response.
+
+    Raises:
+        ValueError: If the AI response is not valid recipe JSON.
     """
 
-    ingredients = request.ingredients
-
-    return RecipeResponse(
-        title="Leftover Kitchen Bowl",
-        description=(
-            "A simple and flexible meal created using the ingredients "
-            "you already have available."
-        ),
-        ingredients=ingredients,
-        instructions=[
-            "Prepare and chop the ingredients into bite-sized pieces.",
-            "Heat a suitable pan over medium heat.",
-            "Cook the ingredients according to their required cooking times.",
-            "Season the dish according to your preference.",
-            "Cook until the ingredients are heated through and fully cooked.",
-            "Serve immediately and enjoy your leftover creation.",
-        ],
-        cooking_time_minutes=25,
+    user_prompt = build_recipe_prompt(
+        ingredients=request.ingredients,
+        dietary_preferences=request.dietary_preferences,
         servings=request.servings,
     )
+
+    ai_response = await chat_completion(
+        system_prompt=RECIPE_SYSTEM_PROMPT,
+        user_prompt=user_prompt,
+    )
+
+    try:
+        recipe_data = json.loads(ai_response)
+
+        return RecipeResponse(**recipe_data)
+
+    except (json.JSONDecodeError, TypeError, ValueError) as exc:
+        raise ValueError(
+            "The AI returned an invalid recipe format."
+        ) from exc
