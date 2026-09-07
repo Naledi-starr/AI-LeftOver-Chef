@@ -1,0 +1,6 @@
+interface IngredientInputProps { ingredients: string[]; onChange: (ingredients: string[]) => void; }
+
+export default function IngredientInput({ ingredients, onChange }: IngredientInputProps) {
+  const updateIngredient = (index: number, value: string) => { const next = [...ingredients]; next[index] = value; onChange(next); };
+  return <div className="field-group"><label>What do you have?</label><p className="field-hint">Add the ingredients waiting in your kitchen.</p><div className="ingredient-list">{ingredients.map((ingredient, index) => <div className="ingredient-row" key={index}><input aria-label={`Ingredient ${index + 1}`} value={ingredient} onChange={(event) => updateIngredient(index, event.target.value)} placeholder={index === 0 ? "e.g. cooked rice" : "Add another ingredient"} />{ingredients.length > 1 && <button type="button" className="remove-button" onClick={() => onChange(ingredients.filter((_, item) => item !== index))} aria-label={`Remove ingredient ${index + 1}`}>x</button>}</div>)}</div><button type="button" className="add-ingredient" onClick={() => onChange([...ingredients, ""])}>+ Add ingredient</button></div>;
+}

@@ -1,0 +1,5 @@
+interface PreferenceSelectorProps { preference: string; servings: number; onPreferenceChange: (preference: string) => void; onServingsChange: (servings: number) => void; }
+
+export default function PreferenceSelector({ preference, servings, onPreferenceChange, onServingsChange }: PreferenceSelectorProps) {
+  return <div className="preference-grid"><div className="field-group"><label htmlFor="preference">Dietary preference</label><p className="field-hint">Optional, but helpful.</p><input id="preference" value={preference} onChange={(event) => onPreferenceChange(event.target.value)} placeholder="e.g. vegetarian, no dairy" /></div><div className="field-group"><label htmlFor="servings">Serves</label><p className="field-hint">How hungry are we?</p><input id="servings" type="number" min="1" max="20" value={servings} onChange={(event) => onServingsChange(Number(event.target.value))} /></div></div>;
+}

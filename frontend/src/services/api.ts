@@ -1,3 +1,5 @@
+import type { Recipe, RecipeRequest } from "../types/recipe";
+
 /**
  * API service for communicating with the AI Leftover Chef backend.
  *
@@ -21,6 +23,20 @@ export async function checkBackendHealth(): Promise<{
 
   if (!response.ok) {
     throw new Error("Backend API is unavailable.");
+  }
+
+  return response.json();
+}
+
+export async function generateRecipe(request: RecipeRequest): Promise<Recipe> {
+  const response = await fetch(`${API_BASE_URL}/api/recipes/generate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+
+  if (!response.ok) {
+    throw new Error("We could not create a recipe right now.");
   }
 
   return response.json();

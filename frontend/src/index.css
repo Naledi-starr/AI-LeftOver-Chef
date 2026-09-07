@@ -1,8 +1,36 @@
-/**
- * Global styles for AI Leftover Chef.
- *
- * Tailwind CSS is imported here so that utility classes can be used
- * throughout the React application.
- */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800&display=swap");
 
 @import "tailwindcss";
+
+@theme {
+  --font-display: "Playfair Display", serif;
+  --font-body: "DM Sans", sans-serif;
+
+  --color-forest: #163020;
+  --color-leaf: #4f8a5b;
+  --color-cream: #f7f4ed;
+  --color-gold: #e8a24a;
+  --color-tomato: #d95d39;
+  --color-ink: #1e1e1e;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #f7f4ed;
+  color: #1e1e1e;
+  font-family: "DM Sans", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}

@@ -1,0 +1,85 @@
+:root {
+  font-family: Georgia, "Times New Roman", serif;
+  color: #26332b;
+  background: #f4f0e8;
+  font-synthesis: none;
+  --ink: #26332b;
+  --muted: #687066;
+  --cream: #f4f0e8;
+  --paper: #fffdf8;
+  --lime: #c7d86b;
+  --coral: #e8795c;
+  --line: #d8d7c9;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+.app-shell { min-height: 100vh; overflow: hidden; }
+.navbar, .footer { display: flex; align-items: center; justify-content: space-between; max-width: 1240px; margin: auto; padding: 28px 5vw; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font: 700 19px Arial, sans-serif; letter-spacing: -.5px; text-decoration: none; }
+.brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: var(--ink); background: var(--lime); font-size: 11px; }
+.button { border: 0; border-radius: 999px; padding: 14px 22px; color: var(--paper); background: var(--ink); font: 700 13px Arial, sans-serif; transition: transform .2s, background .2s; }
+.button:hover { transform: translateY(-2px); background: var(--coral); }
+.button:disabled { cursor: wait; opacity: .65; transform: none; }
+.hero-section { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 5vw; max-width: 1240px; min-height: 570px; margin: auto; padding: 65px 5vw 100px; }
+.hero-copy { max-width: 600px; }
+.eyebrow { display: inline-block; color: #798442; font: 700 11px Arial, sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+h1, h2, h3, p { margin-top: 0; }
+h1 { margin: 20px 0; font-size: clamp(52px, 7vw, 92px); font-weight: 400; line-height: .94; letter-spacing: -4px; }
+h1 em, .generator-intro em { color: var(--coral); font-style: italic; }
+.hero-copy > p, .generator-intro > p { max-width: 450px; margin-bottom: 28px; color: var(--muted); font-size: 19px; line-height: 1.5; }
+.hero-art { position: relative; display: grid; place-items: center; width: min(36vw, 410px); aspect-ratio: 1; margin-left: auto; border-radius: 50%; background: var(--lime); transform: rotate(4deg); }
+.hero-art::before { position: absolute; inset: 13%; border: 1px solid var(--ink); border-radius: 50%; content: ""; }
+.art-tomato { color: var(--coral); font-size: 150px; line-height: 1; transform: translate(-25px, -10px); }
+.art-leaf { position: absolute; top: 28%; right: 24%; color: var(--ink); font: 110px Georgia; transform: rotate(-35deg); }
+.art-bowl { position: absolute; bottom: 20%; left: 27%; color: var(--ink); font-size: 130px; transform: rotate(-5deg); }
+.art-caption { position: absolute; right: 2%; bottom: 16%; color: var(--ink); font: italic 18px Georgia; transform: rotate(-8deg); }
+.how-section { border-top: 1px solid var(--line); background: var(--paper); padding: 95px 5vw 110px; }
+.section-heading, .steps { max-width: 1100px; margin: auto; }
+.section-heading h2 { max-width: 600px; margin: 15px 0; font-size: clamp(36px, 5vw, 64px); font-weight: 400; line-height: 1; letter-spacing: -2px; }
+.section-heading p { max-width: 490px; color: var(--muted); font-size: 17px; line-height: 1.5; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 75px; }
+.steps > div { border-top: 2px solid var(--ink); padding-top: 18px; }
+.steps span { color: var(--coral); font: 700 12px Arial, sans-serif; }
+.steps h3 { margin: 28px 0 9px; font-size: 24px; font-weight: 400; }
+.steps p, .footer { color: var(--muted); line-height: 1.5; }
+.footer { border-top: 1px solid var(--line); max-width: none; padding: 25px 5vw; font: 12px Arial, sans-serif; }
+.generator-page { max-width: 1100px; margin: auto; padding: 28px 5vw 100px; }
+.back-link { border: 0; padding: 0; color: var(--muted); background: transparent; font: 13px Arial, sans-serif; }
+.generator-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 10vw; padding: 75px 0; }
+.generator-intro h1 { font-size: clamp(48px, 6vw, 76px); }
+.generator-form { padding: 34px; border: 1px solid var(--line); border-radius: 4px; background: var(--paper); }
+.field-group { margin-bottom: 30px; }
+label { display: block; margin-bottom: 5px; font-size: 22px; }
+.field-hint { margin-bottom: 12px; color: var(--muted); font: 13px Arial, sans-serif; }
+input { width: 100%; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 10px 2px; outline: 0; color: var(--ink); background: transparent; font-size: 17px; }
+input:focus { border-color: var(--coral); }
+.ingredient-row { display: flex; align-items: center; gap: 10px; }
+.remove-button { border: 0; color: var(--coral); background: transparent; font: 18px Arial, sans-serif; }
+.add-ingredient { border: 0; margin-top: 13px; padding: 0; color: #798442; background: transparent; font: 700 12px Arial, sans-serif; }
+.preference-grid { display: grid; grid-template-columns: 1fr .4fr; gap: 25px; }
+.form-error { margin: -5px 0 18px; color: #b4412d; font: 13px Arial, sans-serif; }
+.recipe-card { border-top: 2px solid var(--ink); padding: 30px 0; }
+.recipe-card-top { display: flex; justify-content: space-between; gap: 20px; }
+.recipe-meta { color: var(--muted); font: 12px Arial, sans-serif; }
+.recipe-card h2 { max-width: 700px; margin: 18px 0 10px; font-size: clamp(40px, 5vw, 64px); font-weight: 400; line-height: 1; }
+.recipe-description { max-width: 600px; color: var(--muted); font-size: 18px; line-height: 1.5; }
+.recipe-columns { display: grid; grid-template-columns: .7fr 1.3fr; gap: 8vw; margin-top: 35px; }
+.recipe-columns h3 { font: 700 11px Arial, sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+.recipe-columns li { margin: 0 0 12px; padding-left: 8px; line-height: 1.4; }
+
+@media (max-width: 700px) {
+  .navbar { padding-top: 20px; }
+  .navbar .button { padding: 11px 13px; font-size: 11px; }
+  .hero-section, .generator-layout { grid-template-columns: 1fr; gap: 45px; padding-top: 55px; }
+  h1 { font-size: 58px; letter-spacing: -3px; }
+  .hero-art { width: min(78vw, 340px); margin: 0 auto; }
+  .how-section { padding-top: 65px; }
+  .steps { grid-template-columns: 1fr; gap: 30px; margin-top: 45px; }
+  .generator-layout { padding-bottom: 55px; }
+  .generator-form { padding: 24px 20px; }
+  .preference-grid, .recipe-columns { grid-template-columns: 1fr; gap: 10px; }
+  .footer { align-items: flex-start; flex-direction: column; gap: 8px; }
+}
