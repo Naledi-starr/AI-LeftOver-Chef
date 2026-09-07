@@ -1,0 +1,8 @@
+/**
+ * Global styles for AI Leftover Chef.
+ *
+ * Tailwind CSS is imported here so that utility classes can be used
+ * throughout the React application.
+ */
+
+@import "tailwindcss";

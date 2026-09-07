@@ -1,12 +1,14 @@
 """Main entry point for the AI Leftover Chef API.
 
-This module creates and configures the FastAPI application. All API routes
-and application-level configuration will eventually be registered here.
+This module creates and configures the FastAPI application and registers
+the middleware and routes required by the application.
 """
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -15,6 +17,18 @@ app = FastAPI(
         "An AI-powered application that helps users create recipes "
         "using ingredients they already have."
     ),
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
