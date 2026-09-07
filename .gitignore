@@ -1,0 +1,38 @@
+# Python virtual environments
+
+venv/
+.venv/
+
+# Environment variables
+
+.env
+
+# Python cache
+
+**pycache**/
+*.py[cod]
+
+# Test and coverage files
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node modules
+
+node_modules/
+
+# Build files
+
+dist/
+build/
+
+# IDE settings
+
+.vscode/
+.idea/
+
+# Operating system files
+
+.DS_Store
+Thumbs.db
