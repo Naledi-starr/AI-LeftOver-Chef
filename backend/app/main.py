@@ -1,12 +1,7 @@
-"""Main entry point for the AI Leftover Chef API.
-
-This module creates and configures the FastAPI application and registers
-the middleware and routes required by the application.
-"""
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.recipes import router as recipes_router
 from app.config import settings
 
 
@@ -32,6 +27,9 @@ app.add_middleware(
 )
 
 
+app.include_router(recipes_router)
+
+
 @app.get("/", tags=["Health"])
 def health_check() -> dict[str, str]:
     """Check whether the API is running successfully.
@@ -39,6 +37,7 @@ def health_check() -> dict[str, str]:
     Returns:
         A dictionary containing the application status and name.
     """
+
     return {
         "status": "healthy",
         "application": settings.PROJECT_NAME,
