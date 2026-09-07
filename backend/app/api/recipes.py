@@ -3,9 +3,10 @@
 This module exposes HTTP endpoints related to recipe generation.
 """
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.schemas.recipe import RecipeRequest, RecipeResponse
+from app.services.ai_client import AIClientError
 from app.services.recipe_service import generate_recipe
 
 
@@ -28,4 +29,10 @@ async def create_recipe(
         A generated recipe.
     """
 
-    return await generate_recipe(request)
+    try:
+        return await generate_recipe(request)
+    except (AIClientError, ValueError) as exc:
+        raise HTTPException(
+            status_code=502,
+            detail=str(exc),
+        ) from exc

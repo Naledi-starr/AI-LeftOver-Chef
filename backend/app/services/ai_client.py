@@ -43,6 +43,7 @@ async def chat_completion(
 
     payload = {
         "model": settings.OPENROUTER_MODEL,
+        "response_format": {"type": "json_object"},
         "messages": [
             {
                 "role": "system",
@@ -67,9 +68,16 @@ async def chat_completion(
 
         data = response.json()
 
-        return data["choices"][0]["message"]["content"]
+        content = data["choices"][0]["message"]["content"]
 
-    except (httpx.HTTPError, KeyError, IndexError) as exc:
+        if not isinstance(content, str) or not content.strip():
+            raise AIClientError(
+                "The AI provider returned an empty response."
+            )
+
+        return content
+
+    except (httpx.HTTPError, KeyError, IndexError, TypeError) as exc:
         raise AIClientError(
             "The AI provider request failed."
         ) from exc

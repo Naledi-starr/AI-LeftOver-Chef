@@ -5,6 +5,7 @@ recipes using the AI provider.
 """
 
 import json
+import re
 
 from app.prompts.recipe_prompt import (
     RECIPE_SYSTEM_PROMPT,
@@ -12,6 +13,22 @@ from app.prompts.recipe_prompt import (
 )
 from app.schemas.recipe import RecipeRequest, RecipeResponse
 from app.services.ai_client import chat_completion
+
+
+def _parse_recipe_response(ai_response: str) -> RecipeResponse:
+    """Parse JSON returned by the model, including fenced JSON output."""
+
+    response_text = ai_response.strip()
+    fenced_match = re.fullmatch(
+        r"```(?:json)?\s*(.*?)\s*```",
+        response_text,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if fenced_match:
+        response_text = fenced_match.group(1).strip()
+
+    recipe_data = json.loads(response_text)
+    return RecipeResponse(**recipe_data)
 
 
 async def generate_recipe(
@@ -42,9 +59,7 @@ async def generate_recipe(
     )
 
     try:
-        recipe_data = json.loads(ai_response)
-
-        return RecipeResponse(**recipe_data)
+        return _parse_recipe_response(ai_response)
 
     except (json.JSONDecodeError, TypeError, ValueError) as exc:
         raise ValueError(
