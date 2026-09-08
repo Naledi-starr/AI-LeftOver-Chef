@@ -15,6 +15,8 @@ import { useState } from "react";
 import IngredientGenerator from "../components/home/IngredientGenerator";
 import RecipeResults from "../components/home/RecipeResults";
 import type { Recipe } from "../types/recipe";
+import ImpactSection from "../components/home/ImpactSection";
+import Footer from "../components/layout/Footer";
 
 function HomePage() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
@@ -231,6 +233,12 @@ function HomePage() {
 
       {/* Recipe Results */}
       <RecipeResults recipe={recipe} isVisible={recipe !== null} />
+
+      {/* Impact Section */}
+      <ImpactSection />
+
+      {/* Footer */}
+      <Footer />
 
     </main>
   );
