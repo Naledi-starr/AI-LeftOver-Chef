@@ -16,12 +16,12 @@ class Settings:
     """Store application configuration values."""
 
     PROJECT_NAME = os.getenv(
-        "PROJECT_NAME",
+        "APP_NAME",
         "AI Leftover Chef",
     )
 
     PROJECT_VERSION = os.getenv(
-        "PROJECT_VERSION",
+        "APP_VERSION",
         "1.0.0",
     )
 
@@ -29,6 +29,11 @@ class Settings:
         "DEBUG",
         "True",
     ).lower() == "true"
+
+    DATABASE_URL = os.getenv(
+        "DATABASE_URL",
+        "postgresql+psycopg://postgres:postgres@localhost:5432/leftover_chef",
+    )
 
     OPENROUTER_API_KEY = os.getenv(
         "OPENROUTER_API_KEY",
@@ -43,5 +48,22 @@ class Settings:
         "https://openrouter.ai/api/v1/chat/completions"
     )
 
+    JWT_SECRET_KEY = os.getenv(
+            "JWT_SECRET_KEY",
+            "change-me-in-production",
+        )
+    
+    JWT_ALGORITHM = os.getenv(
+            "JWT_ALGORITHM",
+            "HS256",
+        )
+    
+    ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv(
+            "ACCESS_TOKEN_EXPIRE_MINUTES",
+            "60",
+        ))
+
 
 settings = Settings()
+
+   
