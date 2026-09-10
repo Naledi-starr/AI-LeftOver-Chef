@@ -7,3 +7,4 @@ table with `Base.metadata`. This is what allows
 """
 
 from app.models.user import User  # noqa: F401
+from app.models.pantry_item import PantryItem  # noqa: F401
