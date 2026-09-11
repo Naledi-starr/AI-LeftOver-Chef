@@ -1,6 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+
+import { useAuth } from "../../hooks/useAuth";
 
 interface NavbarProps {
   onStart: () => void;
@@ -8,6 +11,7 @@ interface NavbarProps {
 
 function Navbar({ onStart }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <header className="relative z-20 flex items-center justify-between py-4">
@@ -22,10 +26,34 @@ function Navbar({ onStart }: NavbarProps) {
         <span>leftover chef</span>
       </a>
 
-      <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
+            <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
         <a className="text-sm font-medium text-gray-600 transition hover:text-forest" href="#how-it-works">
           How it works
         </a>
+        {user ? (
+          <>
+            <Link
+              className="text-sm font-medium text-gray-600 transition hover:text-forest"
+              to="/dashboard"
+            >
+              Dashboard
+            </Link>
+            <button
+              type="button"
+              onClick={logout}
+              className="text-sm font-medium text-gray-600 transition hover:text-forest"
+            >
+              Log out
+            </button>
+          </>
+        ) : (
+          <Link
+            className="text-sm font-medium text-gray-600 transition hover:text-forest"
+            to="/login"
+          >
+            Log in
+          </Link>
+        )}
         <button
           type="button"
           onClick={onStart}
@@ -61,6 +89,36 @@ function Navbar({ onStart }: NavbarProps) {
             >
               How it works
             </a>
+
+                        {user ? (
+              <>
+                <Link
+                  className="block rounded-xl px-4 py-3 font-medium text-forest"
+                  to="/dashboard"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="block w-full rounded-xl px-4 py-3 text-left font-medium text-forest"
+                >
+                  Log out
+                </button>
+              </>
+            ) : (
+              <Link
+                className="block rounded-xl px-4 py-3 font-medium text-forest"
+                to="/login"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Log in
+              </Link>
+            )}
             <button
               type="button"
               onClick={() => {
