@@ -3,9 +3,14 @@
  * Displays the AI-generated recipe after the user submits ingredients.
  */
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Clock, Flame, Users, ChefHat } from "lucide-react";
+import { Check, Clock, Flame, Users, ChefHat, BookmarkPlus } from "lucide-react";
+import { Link } from "react-router-dom";
+
 import type { Recipe } from "../../types/recipe";
+import { useAuth } from "../../hooks/useAuth";
+import { saveRecipe } from "../../services/api";
 
 interface RecipeResultsProps {
   recipe?: Recipe | null;
@@ -13,8 +18,24 @@ interface RecipeResultsProps {
 }
 
 function RecipeResults({ recipe, isVisible }: RecipeResultsProps) {
+  const { token, user } = useAuth();
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error">(
+    "idle",
+  );
+
   if (!isVisible || !recipe) return null;
 
+  async function handleSave() {
+    if (!token || !recipe) return;
+
+    setSaveState("saving");
+    try {
+      await saveRecipe(token, recipe);
+      setSaveState("saved");
+    } catch {
+      setSaveState("error");
+    }
+  }
   return (
     <section
       id="recipe-results"
@@ -45,6 +66,45 @@ function RecipeResults({ recipe, isVisible }: RecipeResultsProps) {
               <ChefHat size={26} />
             </div>
           </div>
+
+          <div className="flex shrink-0 flex-col items-end gap-3">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gold/20 text-forest">
+                <ChefHat size={26} />
+              </div>
+
+              {user ? (
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={saveState === "saving" || saveState === "saved"}
+                  className="flex items-center gap-2 rounded-full bg-forest px-4 py-2.5 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {saveState === "saved" ? (
+                    <>
+                      <Check size={14} /> Saved
+                    </>
+                  ) : (
+                    <>
+                      <BookmarkPlus size={14} />
+                      {saveState === "saving" ? "Saving…" : "Save recipe"}
+                    </>
+                  )}
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className="text-xs font-semibold text-forest underline"
+                >
+                  Log in to save
+                </Link>
+              )}
+
+              {saveState === "error" && (
+                <p className="text-xs font-medium text-tomato">
+                  Couldn't save. Try again.
+                </p>
+              )}
+            </div>
 
           {/* Meta row */}
           <div className="mb-10 flex flex-wrap gap-6 border-y border-forest/10 py-5 text-sm text-gray-600">

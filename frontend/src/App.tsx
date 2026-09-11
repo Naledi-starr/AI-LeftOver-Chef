@@ -1,9 +1,8 @@
 /**
  * Root application component.
  *
- * Owns top-level routing. New pages (pantry, shopping list, etc.)
- * should be added here as additional <Route> entries. Routes that
- * require a logged-in user go inside the <ProtectedRoute /> element.
+ * Owns top-level routing. Routes that require a logged-in user go
+ * inside the <ProtectedRoute /> element.
  */
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -14,6 +13,10 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
+import PantryPage from "./pages/PantryPage";
+import ShoppingListPage from "./pages/ShoppingListPage";
+import SavedRecipesPage from "./pages/SavedRecipesPage";
+import RecipeDetailPage from "./pages/RecipeDetailPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 
@@ -28,6 +31,10 @@ function App() {
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/pantry" element={<PantryPage />} />
+            <Route path="/shopping-list" element={<ShoppingListPage />} />
+            <Route path="/recipes" element={<SavedRecipesPage />} />
+            <Route path="/recipes/:id" element={<RecipeDetailPage />} />
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />

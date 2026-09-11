@@ -1,5 +1,15 @@
 import type { Recipe, RecipeRequest } from "../types/recipe";
 import type { TokenResponse, User } from "../types/auth";
+import type { PantryItem, PantryItemInput } from "../types/pantry";
+import type {
+  ShoppingListItem,
+  ShoppingListItemInput,
+} from "../types/shoppingList";
+import type {
+  SavedRecipe,
+  SavedRecipeInput,
+  SavedRecipeUpdateInput,
+} from "../types/savedRecipe";
 
 /**
  * API service for communicating with the AI Leftover Chef backend.
@@ -130,4 +140,163 @@ export async function loginUser(
  */
 export async function fetchCurrentUser(token: string): Promise<User> {
   return apiFetch("/users/me", {}, token);
+}
+
+// --- Pantry ------------
+
+export async function listPantryItems(token: string): Promise<PantryItem[]> {
+  return apiFetch("/pantry", {}, token);
+}
+
+export async function createPantryItem(
+  token: string,
+  payload: PantryItemInput,
+): Promise<PantryItem> {
+  return apiFetch(
+    "/pantry",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+    token,
+  );
+}
+
+export async function updatePantryItem(
+  token: string,
+  id: number,
+  payload: Partial<PantryItemInput>,
+): Promise<PantryItem> {
+  return apiFetch(
+    `/pantry/${id}`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+    token,
+  );
+}
+
+export async function deletePantryItem(token: string, id: number): Promise<void> {
+  return apiFetch(`/pantry/${id}`, { method: "DELETE" }, token);
+}
+
+// --- Shopping list -----------
+
+export async function listShoppingListItems(
+  token: string,
+): Promise<ShoppingListItem[]> {
+  return apiFetch("/shopping-list", {}, token);
+}
+
+export async function createShoppingListItem(
+  token: string,
+  payload: ShoppingListItemInput,
+): Promise<ShoppingListItem> {
+  return apiFetch(
+    "/shopping-list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+    token,
+  );
+}
+
+export async function updateShoppingListItem(
+  token: string,
+  id: number,
+  payload: Partial<ShoppingListItemInput> & { is_purchased?: boolean },
+): Promise<ShoppingListItem> {
+  return apiFetch(
+    `/shopping-list/${id}`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+    token,
+  );
+}
+
+export async function deleteShoppingListItem(
+  token: string,
+  id: number,
+): Promise<void> {
+  return apiFetch(`/shopping-list/${id}`, { method: "DELETE" }, token);
+}
+
+export async function addMissingIngredientsFromRecipe(
+  token: string,
+  recipeId: number,
+): Promise<ShoppingListItem[]> {
+  return apiFetch(
+    `/shopping-list/from-recipe/${recipeId}`,
+    { method: "POST" },
+    token,
+  );
+}
+
+export async function movePurchasedItemsToPantry(
+  token: string,
+): Promise<PantryItem[]> {
+  return apiFetch(
+    "/shopping-list/move-purchased-to-pantry",
+    { method: "POST" },
+    token,
+  );
+}
+
+// --- Saved recipes ---------
+export async function saveRecipe(
+  token: string,
+  payload: SavedRecipeInput,
+): Promise<SavedRecipe> {
+  return apiFetch(
+    "/api/recipes",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+    token,
+  );
+}
+
+export async function listSavedRecipes(
+  token: string,
+  favoritesOnly = false,
+): Promise<SavedRecipe[]> {
+  const query = favoritesOnly ? "?favorites_only=true" : "";
+  return apiFetch(`/api/recipes${query}`, {}, token);
+}
+
+export async function getSavedRecipe(
+  token: string,
+  id: number,
+): Promise<SavedRecipe> {
+  return apiFetch(`/api/recipes/${id}`, {}, token);
+}
+
+export async function updateSavedRecipe(
+  token: string,
+  id: number,
+  payload: SavedRecipeUpdateInput,
+): Promise<SavedRecipe> {
+  return apiFetch(
+    `/api/recipes/${id}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+    token,
+  );
+}
+
+export async function deleteSavedRecipe(token: string, id: number): Promise<void> {
+  return apiFetch(`/api/recipes/${id}`, { method: "DELETE" }, token);
 }
