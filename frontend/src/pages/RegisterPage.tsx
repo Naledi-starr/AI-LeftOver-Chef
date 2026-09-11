@@ -14,6 +14,7 @@ function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -36,7 +37,7 @@ function RegisterPage() {
 
     setIsSubmitting(true);
     try {
-      await register(email, password);
+      await register(username, email, password);
       navigate("/dashboard", { replace: true });
     } catch (err) {
       setError(
@@ -70,6 +71,30 @@ function RegisterPage() {
         </p>
 
         <form className="mt-8 space-y-5" onSubmit={handleSubmit} noValidate>
+          <div>
+            <label
+              htmlFor="username"
+              className="mb-2 block text-sm font-semibold text-forest"
+            >
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              autoComplete="username"
+              required
+              minLength={2}
+              maxLength={50}
+              pattern="[a-zA-Z0-9_.-]+"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              className="w-full rounded-xl border border-forest/15 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition focus:border-forest focus:ring-2 focus:ring-forest/20"
+            />
+            <p className="mt-1.5 text-xs text-gray-500">
+              Use 2-50 letters, numbers, dots, dashes, or underscores.
+            </p>
+          </div>
+
           <div>
             <label
               htmlFor="email"

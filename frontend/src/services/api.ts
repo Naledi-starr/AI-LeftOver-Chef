@@ -104,13 +104,14 @@ export async function generateRecipe(request: RecipeRequest): Promise<Recipe> {
  * Registers a new user account.
  */
 export async function registerUser(
+  username: string,
   email: string,
   password: string,
 ): Promise<User> {
   return apiFetch("/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ username, email, password }),
   });
 }
 

@@ -31,7 +31,17 @@ def register(payload: UserCreate, db: Session = Depends(get_db)) -> User:
             detail="An account with this email already exists.",
         )
 
+    existing_username = (
+        db.query(User).filter(User.username == payload.username).first()
+    )
+    if existing_username is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="That username is already taken.",
+        )
+
     user = User(
+        username=payload.username,
         email=payload.email,
         hashed_password=hash_password(payload.password),
     )

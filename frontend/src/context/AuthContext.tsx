@@ -68,8 +68,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(access_token);
   }
 
-  async function register(email: string, password: string) {
-    await registerUser(email, password);
+  async function register(username: string, email: string, password: string) {
+    await registerUser(username, email, password);
 
     // Registration does not return a token,
     // so log the user in immediately afterwards.

@@ -42,7 +42,7 @@ function DashboardPage() {
             Dashboard
           </p>
           <h1 className="mt-2 font-display text-4xl leading-tight text-forest sm:text-5xl">
-            Welcome back{user ? `, ${user.email.split("@")[0]}` : ""}.
+            Welcome back{user ? `, ${user.username}` : ""}.
           </h1>
         </section>
 
