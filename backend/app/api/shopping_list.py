@@ -101,7 +101,11 @@ def delete_shopping_list_item(
     db.commit()
 
 
-@router.post("/from-recipe/{recipe_id}", response_model=list[ShoppingListItemRead])
+@router.post(
+    "/from-recipe/{recipe_id}",
+    response_model=list[ShoppingListItemRead],
+    status_code=status.HTTP_201_CREATED,
+)
 def add_missing_ingredients_from_recipe(
     recipe_id: int,
     db: Session = Depends(get_db),
@@ -118,14 +122,34 @@ def add_missing_ingredients_from_recipe(
             detail="Recipe not found.",
         )
 
-    items = [
-        ShoppingListItem(
-            user_id=current_user.id,
-            name=ingredient.name,
-            quantity=1.0,
+    pantry_names = {
+        name
+        for (name,) in db.query(PantryItem.name)
+        .filter(PantryItem.user_id == current_user.id)
+        .all()
+    }
+    shopping_list_names = {
+        name
+        for (name,) in db.query(ShoppingListItem.name)
+        .filter(ShoppingListItem.user_id == current_user.id)
+        .all()
+    }
+    excluded_names = pantry_names | shopping_list_names
+
+    items = []
+    for ingredient in recipe.ingredients:
+        if ingredient.name in excluded_names:
+            continue
+
+        items.append(
+            ShoppingListItem(
+                user_id=current_user.id,
+                name=ingredient.name,
+                quantity=1.0,
+            )
         )
-        for ingredient in recipe.ingredients
-    ]
+        excluded_names.add(ingredient.name)
+
     db.add_all(items)
     db.commit()
     for item in items:
